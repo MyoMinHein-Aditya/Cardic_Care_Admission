@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cardiac Care Center</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f0f2f5; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 900px; margin: auto; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #e74c3c; padding-bottom: 10px; }
+        
+        /* Form Styling */
+        form { margin-bottom: 25px; display: flex; gap: 10px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; flex: 1; }
+        
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background-color: #f8f9fa; color: #34495e; }
+
+        /* Status Colors - These MUST match the status string in app.py */
+        /* If app.py sends "High-Risk", use .High-Risk here */
+        .High-Risk { 
+            color: #d12c2c; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            animation: pulse 2s infinite; 
+        }
+
+        .Stable { 
+            color: #27ae60; 
+            font-weight: bold; 
+        }
+
+        /* Pulse Animation for High Risk Patients */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Button Styling */
+        .discharge-btn { 
+            color: #ffffff;
+            background: #c0392b; 
+            text-decoration: none; 
+            font-size: 0.85em; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            transition: 0.3s;
+        }
+        .discharge-btn:hover { background: #e74c3c; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>❤️ Cardiac Care Admission | Discharge </h1>
+        
+        <form action="/add" method="post">
+            <input type="text" name="name" placeholder="Patient Full Name" required>
+            <input type="number" name="hr" placeholder="HR (BPM)" required>
+            <input type="text" name="bp" placeholder="BP (e.g. 130/85)" required>
+            <button type="submit" style="background-color: #34b7db; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 10px 20px;">Admit Patient</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Vitals (HR | BP)</th>
+                    <th>Triage Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in patients %}
+                <tr>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.hr }} bpm | {{ p.bp }}</td>
+                    <td class="{{ p.status }}">{{ p.status }}</td>
+                    <td>
+                        <a href="/remove/{{ p.id }}" class="discharge-btn">Discharge</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
